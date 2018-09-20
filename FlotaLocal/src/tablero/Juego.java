@@ -116,6 +116,8 @@ public class Juego {
 		 */
 		private void anyadeGrid(int nf, int nc) {
             // POR IMPLEMENTAR
+			ButtonListener listener = new ButtonListener();
+			buttons=new JButton[nf][nc];
 			JPanel panel = new JPanel();
 			nf++;
 			nc+=2;
@@ -130,7 +132,14 @@ public class Juego {
 			for(int i = 1; i<nf; i++) {
 				for (int j =0; j<nc ; j++) {
 					if(j == 0|| j== nc-1) panel.add(new JLabel(Character.toString(c), JLabel.CENTER));
-					else panel.add(new JButton());	
+					else { 
+						JButton boton = new JButton();
+						boton.putClientProperty("fila", i);
+						boton.putClientProperty("col", j);
+						boton.addActionListener(listener);
+						buttons[i-1][j-1] = boton;
+						panel.add(boton);
+					}
 					}
 				c++;
 				}
@@ -251,17 +260,21 @@ public class Juego {
 	 * de los componentes, apoyandose en los metodos putClientProperty y getClientProperty
 	 */
 	private class ButtonListener implements ActionListener {
-		Partida partida = new Partida();
 		@Override
 		public void actionPerformed(ActionEvent e) {
             // POR IMPLEMENTA
-			String boton = e.getActionCommand();
-			for(int fila = 1; fila< NUMFILAS ; fila++ ) {
-				for(int col = 1; col< NUMCOLUMNAS-1 ; col++) {
-					if(boton.equals(anObject))
-				}
+			JButton boton; 
+			boton = (JButton) e.getSource();
+			int fila = (Integer) boton.getClientProperty("fila");
+			int col = (Integer) boton.getClientProperty("col");
+			int estado = partida.pruebaCasilla(fila, col);
+			if(estado == -1) {
+				guiTablero.pintaBoton(boton, Color.CYAN);
+			}else if( estado == -2) {
+				guiTablero.pintaBoton(boton, Color.ORANGE);	
+			}else if( estado > -1){
+				guiTablero.pintaBarcoHundido(partida.getBarco(estado));
 			}
-			int estado = partida.pruebaCasilla(fila,columna);
         } // end actionPerformed
 
 	} // end class ButtonListener
