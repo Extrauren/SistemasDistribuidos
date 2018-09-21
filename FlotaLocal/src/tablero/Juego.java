@@ -87,15 +87,15 @@ public class Juego {
 			JMenu menu, submenu;
 			JMenuBar barra;
 			JMenuItem salir, nuevaPartida, solucion;
-			barra=new JMenuBar();
-			menu = new JMenu("Opciones");
-			salir=new JMenuItem("Salir");
-			nuevaPartida= new JMenuItem("Nueva Partida");
-			solucion= new JMenuItem("Solucion");
+			barra=new JMenuBar();							//crea la barra superior donde se colocara el desplegable
+			menu = new JMenu("Opciones");					//crea el menu desplegable
+			salir=new JMenuItem("Salir");					
+			nuevaPartida= new JMenuItem("Nueva Partida");	//crea los botones de dentro del desplegale
+			solucion= new JMenuItem("Solucion");			
 			menu.add(nuevaPartida);
-			menu.add(solucion);
+			menu.add(solucion);								//añade los botones al desplegable
 			menu.add(salir);  
-	        barra.add(menu);
+	        barra.add(menu);								//añade el desplegable a la barra superior
 	        frame.setJMenuBar(barra);
 	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	        frame.pack();
@@ -103,7 +103,7 @@ public class Juego {
 	        frame.setVisible(true);
 	        
 	        solucion.addActionListener(new MenuListener());
-	        nuevaPartida.addActionListener(new MenuListener());
+	        nuevaPartida.addActionListener(new MenuListener());			//escuchadores de los botones
 	        salir.addActionListener(new MenuListener());
 			
 		} // end anyadeMenu
@@ -123,21 +123,23 @@ public class Juego {
 			nc+=2;
 			panel.setLayout(new GridLayout(nf, nc));
 			char c = 'A';
-			for (int a = 0; a < nc ; a++) {
+			//dibuja la primera fila de la matriz * 1 2 3 4 5 6 7 8 *  
+			for (int a = 0; a < nc ; a++) { 
 				Integer ent = a;
 				if(a == 0|| a== nc-1) panel.add(new JLabel("", JLabel.CENTER));
 				else panel.add(new JLabel(ent.toString(), JLabel.CENTER));
 					
 			}
-			for(int i = 1; i<nf; i++) {
+			//crea el resto de la matriz, botones y las letras de las coordenadas
+			for(int i = 1; i<nf; i++) {	
 				for (int j =0; j<nc ; j++) {
 					if(j == 0|| j== nc-1) panel.add(new JLabel(Character.toString(c), JLabel.CENTER));
 					else { 
 						JButton boton = new JButton();
-						boton.putClientProperty("fila", i);
-						boton.putClientProperty("col", j);
+						boton.putClientProperty("fila", i-1);		//guardamos los datos de cada boton para usarlos en el escuchador
+						boton.putClientProperty("col", j-1);
 						boton.addActionListener(listener);
-						buttons[i-1][j-1] = boton;
+						buttons[i-1][j-1] = boton;				//añadimos los botones a la matriz de botones 
 						panel.add(boton);
 					}
 					}
@@ -237,9 +239,8 @@ public class Juego {
 		public void actionPerformed(ActionEvent e) {
             // POR IMPLEMENTAR
 			Juego juego = new Juego();
-			System.out.println("Entro");
 			String comando = e.getActionCommand();
-			   if (comando.equals("Nueva Partida"))
+			   if (comando.equals("Nueva Partida"))				//Los comandos a realizar al pulsar cada boton de las opciones
 				   	System.out.println("");	   
 			   else if (comando.equals("Solucion"))
 				   System.out.println("");
@@ -268,11 +269,11 @@ public class Juego {
 			int fila = (Integer) boton.getClientProperty("fila");
 			int col = (Integer) boton.getClientProperty("col");
 			int estado = partida.pruebaCasilla(fila, col);
-			if(estado == -1) {
+			if(estado == -1) {									//si es mar
 				guiTablero.pintaBoton(boton, Color.CYAN);
-			}else if( estado == -2) {
+			}else if( estado > -1) {							//si es tocado
 				guiTablero.pintaBoton(boton, Color.ORANGE);	
-			}else if( estado > -1){
+			}else if( estado < -1){								//si es un barco
 				guiTablero.pintaBarcoHundido(partida.getBarco(estado));
 			}
         } // end actionPerformed

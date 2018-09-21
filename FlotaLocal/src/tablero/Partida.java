@@ -51,7 +51,8 @@ public class Partida {
 	 */	
     public int pruebaCasilla(int f, int c) {
         // POR IMPLEMENTAR
-    	return 0;
+    	disparos++;   			//no hace nada
+    	return mar[f][c];
     }
     
 
@@ -63,6 +64,8 @@ public class Partida {
 	 */	
 	public String getBarco(int idBarco) {
         // POR IMPLEMENTAR
+		String cadenaDatos = new String();
+		
 		return null;
 	}
 	
@@ -72,6 +75,11 @@ public class Partida {
 	 */	
 	public String[] getSolucion() {
         // POR IMPLEMENTAR
+		for(int fila = 0; fila < numFilas; fila++) {
+			for(int col =0; col < numColumnas; col++) {
+				pruebaCasilla(fila,col);
+			}
+		}
 		return null;
 	}
     
