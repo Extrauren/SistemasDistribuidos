@@ -73,17 +73,17 @@ public class Partida {
 				//Barco horizontal
 				//en funcion del numero de casillas del barco lo marcaremos como hundido
 				//desde la columna x a la fila y+1 (hasta hundirlo)
-				if (orientacion == 'v') {
+				if (orientacion == 'V') {
 					for(int i=0; i<tam; i++) {
-						mar[fila+1][col] = HUNDIDO;
+						mar[fila][col] = HUNDIDO;
 					}
 				}
 				//Barco vertical
 				//en funcion del numero de casillas del barco lo marcaremos como hundido
 				//desde la fila x a la colunmna y+1 (hasta hundirlo)
-				else {
+				else{
 					for(int i=0; i<tam; i++) {
-						mar[fila][col+1] = HUNDIDO;
+						mar[fila][col] = HUNDIDO;
 					}
 				}
 				quedan--; // restamos 1 a la cantidad
@@ -93,9 +93,10 @@ public class Partida {
 			} else {					//Si tam barco no coincide el numero de veces tocado lo marcamos solamente como tocado
 				mar[f][c] = TOCADO;
 				return TOCADO;
-			}
+			}	
 		}
     }
+    
     
 
 	/**

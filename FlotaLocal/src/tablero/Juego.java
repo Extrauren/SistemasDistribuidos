@@ -135,7 +135,7 @@ public class Juego {
 			//crea el resto de la matriz, botones y las letras de las coordenadas
 			for(int i = 1; i<nf; i++) {	
 				for (int j =0; j<nc ; j++) {
-					if(j == 0|| j== nc-1) panel.add(new JLabel(Character.toString(c), JLabel.CENTER));
+					if(j == 0|| j == nc-1) panel.add(new JLabel(Character.toString(c), JLabel.CENTER));
 					else { 
 						JButton boton = new JButton();
 						boton.putClientProperty("fila", i-1);		//guardamos los datos de cada boton para usarlos en el escuchador
@@ -197,7 +197,8 @@ public class Juego {
 					}else{
 						pintaBoton(buttons[i][j], Color.RED);
 					}
-					
+					quedan= 0;
+					guiTablero.cambiaEstado("Game Over");
 					//Me falla aun esto, porque en teoria podre seguir clickando
 					//corregir para el futuro
 	
@@ -222,17 +223,21 @@ public class Juego {
 			String tamanyo= vectorBarco[3];
 			int fila=Integer.parseInt(filaIni);
 			int col = Integer.parseInt(colIni);
-			for(int i = 0; i< Integer.parseInt(tamanyo) ; i++) {
-				if(orientacion.equals("H")) {
-					JButton boton = buttons[fila][col];
-					guiTablero.pintaBoton(boton, Color.RED);
-					col++;
-				}else if(orientacion.equals("V")){
-					JButton boton = buttons[fila][col];
-					guiTablero.pintaBoton(boton, Color.RED);
-					fila++;
+			if(Integer.parseInt(tamanyo)==1) {
+				JButton boton = buttons[fila][col];
+				guiTablero.pintaBoton(boton, Color.RED);
+			}else {
+					for(int i = 0; i< Integer.parseInt(tamanyo) ; i++) {
+					if(orientacion.equals("H")) {
+						JButton boton = buttons[fila][col];
+						guiTablero.pintaBoton(boton, Color.RED);
+						col++;
+					}else if(orientacion.equals("V")){
+						JButton boton = buttons[fila][col];
+						guiTablero.pintaBoton(boton, Color.RED);
+						fila++;
+					}
 				}
-				
 			}
 			
 			
@@ -287,7 +292,7 @@ public class Juego {
 		public void actionPerformed(ActionEvent e) {
             // POR IMPLEMENTAR
 			String comando = e.getActionCommand();
-			   if (comando.equals("Nueva Partida")) {				//Los comandos a realizar al pulsar cada boton de las opciones
+			if (comando.equals("Nueva Partida")) {				//Los comandos a realizar al pulsar cada boton de las opciones
 	        	   quedan = NUMBARCOS;
 	        	   disparos = 0;	        	   
 				   partida = new Partida(NUMFILAS, NUMCOLUMNAS, NUMBARCOS);
@@ -319,21 +324,26 @@ public class Juego {
 		@Override
 		public void actionPerformed(ActionEvent e) {
             // POR IMPLEMENTA
-			disparos++;
 			JButton boton; 
 			boton = (JButton) e.getSource();
 			int fila = (Integer) boton.getClientProperty("fila");
 			int col = (Integer) boton.getClientProperty("col");
 			int estado = partida.pruebaCasilla(fila, col);
-			if(estado == -1) {									//si es mar
-				guiTablero.pintaBoton(boton, Color.CYAN);
-			}else if( estado == -2) {							//si es tocado
-				guiTablero.pintaBoton(boton, Color.ORANGE);	
-			}else{												//si es un barco
-				guiTablero.pintaBarcoHundido(partida.getBarco(estado));
-				quedan--;
+			if(!boton.getBackground().equals(Color.CYAN) && !boton.getBackground().equals( Color.ORANGE) &&  !boton.getBackground().equals(Color.RED) && quedan>0) {
+				if(estado == -1) {									//si es mar
+					guiTablero.pintaBoton(boton, Color.CYAN);
+				}else if( estado == -2) {							//si es tocado
+					guiTablero.pintaBoton(boton, Color.ORANGE);	
+				}else{												//si es un hundido
+					guiTablero.pintaBarcoHundido(partida.getBarco(estado));
+					quedan--;
+				}
 			}
-			guiTablero.cambiaEstado("Intentos: " + disparos + "    Barcos restantes: " + quedan);
+			disparos++;
+			if(quedan == 0) guiTablero.cambiaEstado("Game Over"); 
+				
+			else guiTablero.cambiaEstado("Intentos: " + disparos + "    Barcos restantes: " + quedan);
+			
         } // end actionPerformed
 
 	} // end class ButtonListener
