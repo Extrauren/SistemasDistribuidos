@@ -53,31 +53,23 @@ public class Partida {
 	 */	
     public int pruebaCasilla(int f, int c) {
         // POR IMPLEMENTAR
-    	
     	//posicion al clicar y lo que nos devuelve
-    	
     	if (mar[f][c] == AGUA || mar[f][c] == TOCADO || mar[f][c] == HUNDIDO) {
     		return mar[f][c];
     	} 
-    	
     	//Aquí tratamos con los barcos
     	else {
     		
     		int posicionBarco = mar[f][c];
     		Barco barco = barcos.get(posicionBarco);
  			barco.tocaBarco();
-			
- 			
  			//si el tam coincide con tocadaos
 			if(barco.getTamanyo() == barco.getTocadas()) {
-				
 				//con la info del barco 
-				
 				int tam = barco.getTamanyo();
 				int col = barco.getColumnaInicial();
 				int fila = barco.getFilaInicial();
 				char orientacion = barco.getOrientacion();
-				
 				//Barco horizontal
 				//en funcion del numero de casillas del barco lo marcaremos como hundido
 				//desde la columna x a la fila y+1 (hasta hundirlo)
@@ -97,11 +89,8 @@ public class Partida {
 				quedan--; // restamos 1 a la cantidad
 				//devolvemos la posicion
 				return posicionBarco;
-			
-			
-			} else {
-				
-				//Si tam barco no coincide el numero de veces tocado lo marcamos solamente como tocado
+		
+			} else {					//Si tam barco no coincide el numero de veces tocado lo marcamos solamente como tocado
 				mar[f][c] = TOCADO;
 				return TOCADO;
 			}
@@ -117,8 +106,8 @@ public class Partida {
 	 */	
 	public String getBarco(int idBarco) {
         // POR IMPLEMENTAR
-		//nos interesa los datos del barco, su "posicion"
-		return barcos.get(idBarco).toString();
+		return barcos.get(idBarco).toString();                 	//nos interesa los datos del barco, su "posicion"
+		
 	}
 	
 	/**

@@ -195,7 +195,7 @@ public class Juego {
 					if(valor==Partida.AGUA){
 						pintaBoton(buttons[i][j], Color.CYAN);
 					}else{
-						pintaBoton(buttons[i][j], Color.ORANGE);
+						pintaBoton(buttons[i][j], Color.RED);
 					}
 					
 					//Me falla aun esto, porque en teoria podre seguir clickando
@@ -215,25 +215,25 @@ public class Juego {
 		 */
 		public void pintaBarcoHundido(String cadenaBarco) {
             // POR IMPLEMENTAR
-			/**
-			 * 
-			 * Mas o menos deberia ser como prueba casilla 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 			
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 * 
-			 */	
-			
-			
+			String[] vectorBarco = cadenaBarco.split("#");
+			String filaIni = vectorBarco[0];
+			String colIni= vectorBarco[1];
+			String orientacion= vectorBarco[2];
+			String tamanyo= vectorBarco[3];
+			int fila=Integer.parseInt(filaIni);
+			int col = Integer.parseInt(colIni);
+			for(int i = 0; i< Integer.parseInt(tamanyo) ; i++) {
+				if(orientacion.equals("H")) {
+					JButton boton = buttons[fila][col];
+					guiTablero.pintaBoton(boton, Color.RED);
+					col++;
+				}else if(orientacion.equals("V")){
+					JButton boton = buttons[fila][col];
+					guiTablero.pintaBoton(boton, Color.RED);
+					fila++;
+				}
+				
+			}
 			
 			
 		} // end pintaBarcoHundido
@@ -289,24 +289,18 @@ public class Juego {
 			String comando = e.getActionCommand();
 			   if (comando.equals("Nueva Partida")) {				//Los comandos a realizar al pulsar cada boton de las opciones
 	        	   quedan = NUMBARCOS;
-	        	   disparos = 0;
-	        	   
+	        	   disparos = 0;	        	   
 				   partida = new Partida(NUMFILAS, NUMCOLUMNAS, NUMBARCOS);
-	        	   
 				   guiTablero.limpiaTablero();
 	        	   guiTablero.cambiaEstado("Intentos: " + disparos + "    Barcos restantes: " + quedan);
-
 				   }
 			   else if (comando.equals("Solucion")) {
 	        	   guiTablero.muestraSolucion();
 			   }
-
 			   else if (comando.equals("Salir")) {
 				   System.exit(0);		   
 	        	   guiTablero.liberaRecursos();
 			   }
-				   System.exit(0);	
-			   
 		} // end actionPerformed
 
 	} // end class MenuListener
@@ -325,6 +319,7 @@ public class Juego {
 		@Override
 		public void actionPerformed(ActionEvent e) {
             // POR IMPLEMENTA
+			disparos++;
 			JButton boton; 
 			boton = (JButton) e.getSource();
 			int fila = (Integer) boton.getClientProperty("fila");
@@ -332,11 +327,13 @@ public class Juego {
 			int estado = partida.pruebaCasilla(fila, col);
 			if(estado == -1) {									//si es mar
 				guiTablero.pintaBoton(boton, Color.CYAN);
-			}else if( estado > -1) {							//si es tocado
+			}else if( estado == -2) {							//si es tocado
 				guiTablero.pintaBoton(boton, Color.ORANGE);	
-			}else if( estado < -1){								//si es un barco
+			}else{												//si es un barco
 				guiTablero.pintaBarcoHundido(partida.getBarco(estado));
+				quedan--;
 			}
+			guiTablero.cambiaEstado("Intentos: " + disparos + "    Barcos restantes: " + quedan);
         } // end actionPerformed
 
 	} // end class ButtonListener
