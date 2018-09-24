@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import tablero.Partida;
+
 public class Juego {
 
 	/**
@@ -84,7 +86,7 @@ public class Juego {
 		 */
 		private void anyadeMenu() {
             // POR IMPLEMENTAR
-			JMenu menu, submenu;
+			JMenu menu;
 			JMenuBar barra;
 			JMenuItem salir, nuevaPartida, solucion;
 			barra=new JMenuBar();							//crea la barra superior donde se colocara el desplegable
@@ -177,6 +179,31 @@ public class Juego {
 		 */
 		public void muestraSolucion() {
             // POR IMPLEMENTAR
+
+			for(int i=0;i<NUMFILAS;i++){
+				for (int j = 0; j < NUMCOLUMNAS; j++) {
+	 
+					//veremos que nos devuelve prueba casilla 
+					//y en funcion de eso vamos haciendo
+					int valor=partida.pruebaCasilla(i, j);
+					
+					
+					//segun el valor que nos devuelva pintaremos una cosa o otra
+					//solo me interesan 2 de los 3 valores
+					//el de tocado(que sera Rojo y el del agua que sera Azul
+					//corregir esto
+					if(valor==Partida.AGUA){
+						pintaBoton(buttons[i][j], Color.CYAN);
+					}else{
+						pintaBoton(buttons[i][j], Color.ORANGE);
+					}
+					
+					//Me falla aun esto, porque en teoria podre seguir clickando
+					//corregir para el futuro
+	
+				}
+			}
+			
 			
 		} // end muestraSolucion
 
@@ -188,6 +215,27 @@ public class Juego {
 		 */
 		public void pintaBarcoHundido(String cadenaBarco) {
             // POR IMPLEMENTAR
+			/**
+			 * 
+			 * Mas o menos deberia ser como prueba casilla 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 			
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 * 
+			 */	
+			
+			
+			
+			
 		} // end pintaBarcoHundido
 
 		/**
@@ -238,14 +286,27 @@ public class Juego {
 		@Override
 		public void actionPerformed(ActionEvent e) {
             // POR IMPLEMENTAR
-			Juego juego = new Juego();
 			String comando = e.getActionCommand();
-			   if (comando.equals("Nueva Partida"))				//Los comandos a realizar al pulsar cada boton de las opciones
-				   	System.out.println("");	   
-			   else if (comando.equals("Solucion"))
-				   System.out.println("");
-			   else if (comando.equals("Salir"))
+			   if (comando.equals("Nueva Partida")) {				//Los comandos a realizar al pulsar cada boton de las opciones
+	        	   quedan = NUMBARCOS;
+	        	   disparos = 0;
+	        	   
+				   partida = new Partida(NUMFILAS, NUMCOLUMNAS, NUMBARCOS);
+	        	   
+				   guiTablero.limpiaTablero();
+	        	   guiTablero.cambiaEstado("Intentos: " + disparos + "    Barcos restantes: " + quedan);
+
+				   }
+			   else if (comando.equals("Solucion")) {
+	        	   guiTablero.muestraSolucion();
+			   }
+
+			   else if (comando.equals("Salir")) {
+				   System.exit(0);		   
+	        	   guiTablero.liberaRecursos();
+			   }
 				   System.exit(0);	
+			   
 		} // end actionPerformed
 
 	} // end class MenuListener

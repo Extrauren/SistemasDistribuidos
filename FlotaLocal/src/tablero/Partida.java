@@ -3,6 +3,8 @@ package tablero;
 import java.util.Random;
 import java.util.Vector;
 
+import tablero.Barco;
+
 public class Partida {
 	
 	public static final int AGUA = -1, TOCADO = -2, HUNDIDO = -3;
@@ -51,8 +53,59 @@ public class Partida {
 	 */	
     public int pruebaCasilla(int f, int c) {
         // POR IMPLEMENTAR
-    	disparos++;   			//no hace nada
-    	return mar[f][c];
+    	
+    	//posicion al clicar y lo que nos devuelve
+    	
+    	if (mar[f][c] == AGUA || mar[f][c] == TOCADO || mar[f][c] == HUNDIDO) {
+    		return mar[f][c];
+    	} 
+    	
+    	//Aquí tratamos con los barcos
+    	else {
+    		
+    		int posicionBarco = mar[f][c];
+    		Barco barco = barcos.get(posicionBarco);
+ 			barco.tocaBarco();
+			
+ 			
+ 			//si el tam coincide con tocadaos
+			if(barco.getTamanyo() == barco.getTocadas()) {
+				
+				//con la info del barco 
+				
+				int tam = barco.getTamanyo();
+				int col = barco.getColumnaInicial();
+				int fila = barco.getFilaInicial();
+				char orientacion = barco.getOrientacion();
+				
+				//Barco horizontal
+				//en funcion del numero de casillas del barco lo marcaremos como hundido
+				//desde la columna x a la fila y+1 (hasta hundirlo)
+				if (orientacion == 'v') {
+					for(int i=0; i<tam; i++) {
+						mar[fila+1][col] = HUNDIDO;
+					}
+				}
+				//Barco vertical
+				//en funcion del numero de casillas del barco lo marcaremos como hundido
+				//desde la fila x a la colunmna y+1 (hasta hundirlo)
+				else {
+					for(int i=0; i<tam; i++) {
+						mar[fila][col+1] = HUNDIDO;
+					}
+				}
+				quedan--; // restamos 1 a la cantidad
+				//devolvemos la posicion
+				return posicionBarco;
+			
+			
+			} else {
+				
+				//Si tam barco no coincide el numero de veces tocado lo marcamos solamente como tocado
+				mar[f][c] = TOCADO;
+				return TOCADO;
+			}
+		}
     }
     
 
@@ -64,9 +117,8 @@ public class Partida {
 	 */	
 	public String getBarco(int idBarco) {
         // POR IMPLEMENTAR
-		String cadenaDatos = new String();
-		
-		return null;
+		//nos interesa los datos del barco, su "posicion"
+		return barcos.get(idBarco).toString();
 	}
 	
 	/**
@@ -75,12 +127,18 @@ public class Partida {
 	 */	
 	public String[] getSolucion() {
         // POR IMPLEMENTAR
-		for(int fila = 0; fila < numFilas; fila++) {
-			for(int col =0; col < numColumnas; col++) {
-				pruebaCasilla(fila,col);
-			}
-		}
-		return null;
+		
+		//vector donde meteremos los barcos para asignarles su posicion 
+		String[] vectorBarcosPosicion = new String[barcos.size()];
+
+        for(int i=0; i<barcos.size(); i++){
+        
+        	//en el string del vector le vamos metiendo su posicion a cada barco
+        	//con getbarco sacamos esta informacion
+        	vectorBarcosPosicion[i] = getBarco(i);
+        }
+        //Devolveremos el vector
+		return vectorBarcosPosicion;
 	}
     
 
